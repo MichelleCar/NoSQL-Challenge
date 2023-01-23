@@ -55,7 +55,8 @@ Key thoughts:
 #### Part 2: Update the Database
 The amagazine editors have some requested modifications for the database before we can perform any queries or analysis.
 1. Add a new restaurant ("Penang Flavours") to the database (*insert_one*)
-2. Update the Business Type ID to reflect that it is of the type "Restaurant/Cafe/Canteen" 
+2. Update the Business Type ID to reflect that it is of the type "Restaurant/Cafe/Canteen"
+ 
       **query = {'BusinessType': 'Restaurant/Cafe/Canteen'}
       
         fields = {'BusinessTypeID': 1, 'BusinessType': 1}
@@ -63,8 +64,9 @@ The amagazine editors have some requested modifications for the database before 
         results = list(establishments.find(query, fields))
         
         Using '$set' to change the Business Type ID**
-4. The magazine is not interested in establishments in Dover, so we will remove all documents containing the "Dover" local authority (994 entries, using 'delete_many')
-5. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, {'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}
+        
+3. The magazine is not interested in establishments in Dover, so we will remove all documents containing the "Dover" local authority (*994 entries*, using **'delete_many'**)
+4. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, <{'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}>
 
 Key thoughts:
 * Because the server is live, any changes are made in real time.  That means that going back to a previous step and trying to make changes will result in errors.  For example, after deleting all the records with local authority in "Dover", I noticed a small element I needed to make earlier in the code.  After making hte change, any instructions related to searching and deleting the "Dover" documents no longer worked.  I had to reinstall my JSON data to ensure that Dover was refreshed/reinstalled into the database to successfully run my code.
