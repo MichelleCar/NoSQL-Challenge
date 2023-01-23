@@ -24,6 +24,8 @@ Here are some of the advantages offered by MongoDB:
 * It can save a lot of data which will help in faster query processing.
 
 ### Disadvantages of MongoDB
+
+
 * MongoDB doesn’t support joins like a relational database. Yet one can use joins functionality by adding by coding it manually. But it may slow execution and affect performance.
 * MongoDB stores key names for each value pair. Also, due to no functionality of joins, there is data redundancy. This results in increasing unnecessary usage of memory.
 * You can have a document size, not more than 16MB.
@@ -37,6 +39,30 @@ Sources:
 * https://www.adathedev.co.uk/2011/02/thoughts-on-mongodb-from-sql-server-dev.html
 
 
-## Project Details
+## Project Details and Observations
+Using the Pymongo Python library, Pretty Print, Pandas, and Jupyter Notebook, the challenge was divided into three parts:
+1) Part 1 - Database and and Jupyter Notebook Set Up
+2) Part 2 - Update the Database
+3) Part 3 - Exploratory Analysis
+
+### Part 1: Database and and Jupyter Notebook Set Up
+* The process begins with activating our MongoDB service in the background using the Terminal: brew services start mongodb-community@6.0
+* Then importing the JSON data provided: mongoimport --type json -d uk_food -c establishments --drop --jsonArray establishments.json
+* Once the data is imported, using the mongosh terminal, we named our database (use uk_food) and our collection ("establishmnets")
+* After initiating Jupyter Notebook, we imported the Pymongo and Pretty Print libraries, created an instance of the Mongo Client, and assigned our database and collections to a variable.
+
+### Part 2: Update the Database
+The amagazine editors have some requested modifications for the database before we can perform any queries or analysis.
+1. Add a new restaurant ("Penang Flavours') to the database (insert_one)
+2. Update the Business Type ID to reflect that it is of the type "Restaurant/Cafe/Canteen" 
+      * query = {'BusinessType': 'Restaurant/Cafe/Canteen'}
+        fields = {'BusinessTypeID': 1, 'BusinessType': 1}
+        results = list(establishments.find(query, fields))
+      * Using '$set' to change the Business Type ID
+4. The magazine is not interested in establishments in Dover, so we will remove all documents containing the "Dover" local authority (994 entries, using 'delete_many')
+5. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, {'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}
+
+
+### Part 3: Exploratory Analysis
 
 
