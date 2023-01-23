@@ -66,7 +66,7 @@ The amagazine editors have some requested modifications for the database before 
         Using '$set' to change the Business Type ID**
         
 3. The magazine is not interested in establishments in Dover, so we will remove all documents containing the "Dover" local authority (*994 entries*, using **'delete_many'**)
-4. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, <{'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}>
+4. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, <**{'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}**>
 
 Key thoughts:
 * Because the server is live, any changes are made in real time.  That means that going back to a previous step and trying to make changes will result in errors.  For example, after deleting all the records with local authority in "Dover", I noticed a small element I needed to make earlier in the code.  After making hte change, any instructions related to searching and deleting the "Dover" documents no longer worked.  I had to reinstall my JSON data to ensure that Dover was refreshed/reinstalled into the database to successfully run my code.
@@ -76,7 +76,41 @@ Key thoughts:
 Eat Safe, Love has specific questions they need answered, which will help them find the locations they wish to visit and those they wish to avoid.
 
 After importing our dependencies, creating our instance of the Mongo client, assigning our database and collections to variable, and verifying that data is callable, we proceeded to some analysis.
-1. Using our query ["query1 = {'scores.Hygiene': {'$eq': 20}}"] to find hygiene scores equal to 20, we found that  
+1. Using our query <**"query1 = {'scores.Hygiene': {'$eq': 20}}**> to find hygiene scores equal to 20, we found that 41 establishments.
+2. In our next query, we found 34 establishments in London with a rating of 4, using: 
+                 <**query2 = {'LocalAuthorityName': {'$regex': 'London'}, 'RatingValue': {'$gte': '4'}}**>
+                 
+3. Next we searched for the top 5 establishments within 0.01 degrees of our newly added restaurant "Penang Flavours" with the lowest hygiene scores...these seemed like options we might want to avoid.  After converting our longitude and latitude to decimals, the following query gave us the best results:
+
+**degree_search = 0.01
+latitude = 51.49014200
+longitude = 0.08384000
+
+query3 = {'geocode.latitude': {'$gte': latitude - degree_search, '$lte': latitude + degree_search}, 
+         'geocode.longitude': {'$gte': longitude - degree_search, '$lte': longitude + degree_search},
+         'RatingValue': '4'
+        }
+
+*Sort by hygiene score*
+sort = [('scores.Hygiene', 1)]
+
+*Limit to top 5 establoshments*
+limit = 5**
+
+4. Finally, we searched how many restaurants had a hygiene score of 0, grouped them by jurisdiction, and sorted them from highest to lowest (number of establishments).  We created a data pipeline that:
+
+** *Matches establishments with a hygiene score of 0*
+match_query = {'$match': {'scores.Hygiene': {'$eq': 0}}}
+
+*Groups the matches by Local Authority*
+group_query = {'$group': {'_id': "$LocalAuthorityName", 'count': { '$sum': 1 }}}
+
+*Sorts the matches from highest to lowest*
+sort_values = {'$sort': { 'count': -1 }}
+
+*Put the pipeline together*
+pipeline = [match_query, group_query, sort_values]**
+                 
 
 
 
