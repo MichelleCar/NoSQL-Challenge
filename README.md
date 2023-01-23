@@ -56,10 +56,10 @@ Key thoughts:
 The amagazine editors have some requested modifications for the database before we can perform any queries or analysis.
 1. Add a new restaurant ("Penang Flavours') to the database (insert_one)
 2. Update the Business Type ID to reflect that it is of the type "Restaurant/Cafe/Canteen" 
-      * query = {'BusinessType': 'Restaurant/Cafe/Canteen'}
+      **query = {'BusinessType': 'Restaurant/Cafe/Canteen'}
         fields = {'BusinessTypeID': 1, 'BusinessType': 1}
         results = list(establishments.find(query, fields))
-      * Using '$set' to change the Business Type ID
+        Using '$set' to change the Business Type ID**
 4. The magazine is not interested in establishments in Dover, so we will remove all documents containing the "Dover" local authority (994 entries, using 'delete_many')
 5. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, {'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}
 
@@ -69,4 +69,12 @@ Key thoughts:
 
 #### Part 3: Exploratory Analysis
 Eat Safe, Love has specific questions they need answered, which will help them find the locations they wish to visit and those they wish to avoid.
+
+After importing our dependencies, creating our instance of the Mongo client, assigning our database and collections to variable, and verifying that data is callable, we proceeded to some analysis.
+1. Using our query ["query1 = {'scores.Hygiene': {'$eq': 20}}"] to find hygiene scores equal to 20, we found that  
+
+
+
+
+
 
