@@ -24,8 +24,6 @@ Here are some of the advantages offered by MongoDB:
 * It can save a lot of data which will help in faster query processing.
 
 ### Disadvantages of MongoDB
-
-
 * MongoDB doesn’t support joins like a relational database. Yet one can use joins functionality by adding by coding it manually. But it may slow execution and affect performance.
 * MongoDB stores key names for each value pair. Also, due to no functionality of joins, there is data redundancy. This results in increasing unnecessary usage of memory.
 * You can have a document size, not more than 16MB.
@@ -45,13 +43,16 @@ Using the Pymongo Python library, Pretty Print, Pandas, and Jupyter Notebook, th
 2) Part 2 - Update the Database
 3) Part 3 - Exploratory Analysis
 
-### Part 1: Database and and Jupyter Notebook Set Up
+#### Part 1: Database and and Jupyter Notebook Set Up
 * The process begins with activating our MongoDB service in the background using the Terminal: brew services start mongodb-community@6.0
 * Then importing the JSON data provided: mongoimport --type json -d uk_food -c establishments --drop --jsonArray establishments.json
 * Once the data is imported, using the mongosh terminal, we named our database (use uk_food) and our collection ("establishmnets")
 * After initiating Jupyter Notebook, we imported the Pymongo and Pretty Print libraries, created an instance of the Mongo Client, and assigned our database and collections to a variable.
 
-### Part 2: Update the Database
+Key thoughts:
+* Because you are using a server that sits in the background, it is important to constantly verify that your server and notebook are communicating.  Printing lists of our databases ["print(mongo.list_database_names())"], collections ["print(db.list_collection_names())"], and documents ["pprint(db.establishments.find_one())"] allowed us to confirm the database was active and that the notebook was successfully pulling data.
+
+#### Part 2: Update the Database
 The amagazine editors have some requested modifications for the database before we can perform any queries or analysis.
 1. Add a new restaurant ("Penang Flavours') to the database (insert_one)
 2. Update the Business Type ID to reflect that it is of the type "Restaurant/Cafe/Canteen" 
@@ -62,7 +63,10 @@ The amagazine editors have some requested modifications for the database before 
 4. The magazine is not interested in establishments in Dover, so we will remove all documents containing the "Dover" local authority (994 entries, using 'delete_many')
 5. Some of the number values are stored as strings, when they should be stored as numbers.  Using 'update_many' we converted longitude and latitude to decimals using, {'$set': {"geocode.latitude": {'$toDecimal': "$geocode.latitude"}}}
 
+Key thoughts:
+* Because the server is live, any changes are made in real time.  That means that going back to a previous step and trying to make changes will result in errors.  For example, after deleting all the records with local authority in "Dover", I noticed a small element I needed to make earlier in the code.  After making hte change, any instructions related to searching and deleting the "Dover" documents no longer worked.  I had to reinstall my JSON data to ensure that Dover was refreshed/reinstalled into the database to successfully run my code.
+* MongoDB has a rich lobrary of operators...it was important to know which one to use for a specific task 
 
-### Part 3: Exploratory Analysis
-
+#### Part 3: Exploratory Analysis
+Eat Safe, Love has specific questions they need answered, which will help them find the locations they wish to visit and those they wish to avoid.
 
