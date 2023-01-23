@@ -111,9 +111,5 @@ After importing our dependencies, creating our instance of the Mongo client, ass
            *Put the pipeline together*
            pipeline = [match_query, group_query, sort_values]
                  
-
-
-
-
-
-
+Key thoughts:
+* MongoDB operators make working with NoSQL databases super-easy.  However, learning how to combine them with more complex functions (ie. figuring out how to search for restaurants within 0.01 degree of a particular location, using +/- with two defined variables) was very, very tricky!  Once I realized that they could be used in this way, and in this case to set a maximum and minimum limit for our query, it all came together.  A real brain twister...as it was hard to find comparable knowledgebase items on the web.
