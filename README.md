@@ -82,7 +82,7 @@ After importing our dependencies, creating our instance of the Mongo client, ass
                  
 3. Next we searched for the top 5 establishments within 0.01 degrees of our newly added restaurant "Penang Flavours" with the lowest hygiene scores...these seemed like options we might want to avoid.  After converting our longitude and latitude to decimals, the following query gave us the best results:
 
-           **degree_search = 0.01
+           degree_search = 0.01
            latitude = 51.49014200
            longitude = 0.08384000
 
@@ -91,15 +91,15 @@ After importing our dependencies, creating our instance of the Mongo client, ass
                     'RatingValue': '4'
                    }
 
-           *Sort by hygiene score*
+           *Sorts by hygiene score*
            sort = [('scores.Hygiene', 1)]
 
            *Limit to top 5 establoshments*
-           limit = 5**
+           limit = 5
 
 4. Finally, we searched how many restaurants had a hygiene score of 0, grouped them by jurisdiction, and sorted them from highest to lowest (number of establishments).  We created a data pipeline that:
 
-           ** *Matches establishments with a hygiene score of 0*
+           *Matches establishments with a hygiene score of 0*
            match_query = {'$match': {'scores.Hygiene': {'$eq': 0}}}
 
            *Groups the matches by Local Authority*
@@ -109,7 +109,7 @@ After importing our dependencies, creating our instance of the Mongo client, ass
            sort_values = {'$sort': { 'count': -1 }}
 
            *Put the pipeline together*
-           pipeline = [match_query, group_query, sort_values]**
+           pipeline = [match_query, group_query, sort_values]
                  
 
 
