@@ -92,7 +92,7 @@ After importing our dependencies, creating our instance of the Mongo client, ass
                    }
 
            *Sorts by hygiene score*
-           sort = [('scores.Hygiene', 1)]
+           sort = [('scores.Hygiene', -1)]
 
            *Limit to top 5 establoshments*
            limit = 5
